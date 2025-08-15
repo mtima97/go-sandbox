@@ -2,12 +2,23 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 
-	"github.com/fatih/color"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	fmt.Println("Hello World")
+	r := gin.Default()
 
-	color.Red("This text is red")
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "pong",
+		})
+	})
+
+	fmt.Println("server started")
+
+	if err := r.Run(":8080"); err != nil {
+		fmt.Println("error:", err)
+	}
 }
