@@ -16,8 +16,6 @@ func main() {
 		})
 	})
 
-	fmt.Println("server started")
-
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("error:", err)
 	}
