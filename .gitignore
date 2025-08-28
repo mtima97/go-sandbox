@@ -1,2 +1,6 @@
 .devcontainer
 .idea
+.env
+
+# auxiliary
+requests
