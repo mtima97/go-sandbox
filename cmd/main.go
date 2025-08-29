@@ -2,19 +2,20 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"log"
+	"test/internal/api"
+	"test/internal/config"
 )
 
 func main() {
-	r := gin.Default()
+	conf, err := config.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	fmt.Println(conf)
+
+	r := api.RegisterRoutes()
 
 	if err := r.Run(":8080"); err != nil {
 		fmt.Println("error:", err)
