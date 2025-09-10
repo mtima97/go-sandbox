@@ -22,6 +22,8 @@ func main() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
+	defer db.Close()
+
 	r := api.RegisterRoutes(db)
 
 	if err := r.Run(conf.AppPort); err != nil {
