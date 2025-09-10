@@ -4,23 +4,23 @@ import (
 	"fmt"
 	"net/http"
 	"test/internal/domain"
-	"test/internal/store"
+	"test/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	store store.Store
+	servc service.Cv
 }
 
-func NewHandler(store store.Store) Handler {
-	return Handler{store: store}
+func NewHandler(servc service.Cv) Handler {
+	return Handler{servc: servc}
 }
 
 func (h Handler) GetProfile(ctx *gin.Context) {
 	lang := ctx.DefaultQuery("lang", domain.LangEn)
 
-	raw, err := h.store.GetProfile(ctx.Request.Context(), lang)
+	raw, err := h.servc.Profile(ctx, lang)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, genError(err))
 		return

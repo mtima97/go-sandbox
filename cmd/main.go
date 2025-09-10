@@ -6,6 +6,7 @@ import (
 	"log"
 	"test/internal/api"
 	"test/internal/config"
+	"test/internal/service"
 	"test/internal/store"
 )
 
@@ -24,7 +25,7 @@ func main() {
 
 	defer db.Close()
 
-	r := api.RegisterRoutes(db)
+	r := api.RegisterRoutes(service.New(db))
 
 	if err := r.Run(conf.AppPort); err != nil {
 		fmt.Println("error:", err)

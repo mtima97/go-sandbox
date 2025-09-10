@@ -2,14 +2,14 @@ package api
 
 import (
 	"test/internal/api/handlers"
-	"test/internal/store"
+	"test/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(store store.Store) *gin.Engine {
+func RegisterRoutes(cv service.Cv) *gin.Engine {
 	r := gin.Default()
-	h := handlers.NewHandler(store)
+	h := handlers.NewHandler(cv)
 
 	api := r.Group("/api")
 
