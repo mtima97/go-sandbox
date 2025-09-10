@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"test/internal/config"
 
@@ -36,4 +37,16 @@ func NewDbConn(ctx context.Context, cfg config.Cfg) (Db, error) {
 
 func (d Db) Close() {
 	d.pool.Close()
+}
+
+func (d Db) GetProfile(ctx context.Context, lang string) (json.RawMessage, error) {
+	q := "select * from get_profile($1)"
+
+	var raw json.RawMessage
+
+	if err := d.pool.QueryRow(ctx, q, lang).Scan(&raw); err != nil {
+		return nil, err
+	}
+
+	return raw, nil
 }

@@ -17,12 +17,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	_, err = store.NewDbConn(ctx, conf)
+	db, err := store.NewDbConn(ctx, conf)
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	r := api.RegisterRoutes()
+	r := api.RegisterRoutes(db)
 
 	if err := r.Run(conf.AppPort); err != nil {
 		fmt.Println("error:", err)
