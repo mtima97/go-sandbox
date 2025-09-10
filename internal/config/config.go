@@ -7,7 +7,7 @@ import (
 
 type Cfg struct {
 	AppPort        string   `env:"APP_PORT,required"`
-	AllowedOrigins []string `env:"ALLOWED_ORIGINS,required"`
+	AllowedOrigins []string `env:"ALLOWED_ORIGINS"`
 	DbUser         string   `env:"DB_USER,required"`
 	DbPass         string   `env:"DB_PASS,required"`
 	DbHost         string   `env:"DB_HOST,required"`
