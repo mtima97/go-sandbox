@@ -42,8 +42,9 @@ type Language struct {
 }
 
 type Project struct {
-	Id          pgtype.Int8 `db:"id"`
-	ProjectName pgtype.Text `db:"pname"`
-	Link        pgtype.Text `db:"link"`
-	LinkTxt     pgtype.Text `db:"link_txt"`
+	Id          pgtype.Int8   `db:"id"`
+	ProjectName pgtype.Text   `db:"pname"`
+	Link        pgtype.Text   `db:"link"`
+	LinkTxt     pgtype.Text   `db:"link_txt"`
+	Points      []pgtype.Text `db:"points"`
 }

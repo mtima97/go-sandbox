@@ -46,4 +46,5 @@ type Project struct {
 	ProjectName utils.Nullable[string] `json:"project_name"`
 	Link        string                 `json:"link"`
 	LinkTxt     utils.Nullable[string] `json:"link_txt"`
+	Points      []string               `json:"points"`
 }

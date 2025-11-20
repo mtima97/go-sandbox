@@ -148,11 +148,18 @@ func (s Cv) Projects(ctx context.Context, lang string) ([]responses.Project, err
 	}
 
 	for _, p := range pgmodels {
+		points := make([]string, len(p.Points))
+
+		for i, point := range p.Points {
+			points[i] = point.String
+		}
+
 		projects = append(projects, responses.Project{
 			Id:          p.Id.Int64,
 			ProjectName: utils.Nullable[string]{Valid: p.ProjectName.Valid, Value: p.ProjectName.String},
 			Link:        p.Link.String,
 			LinkTxt:     utils.Nullable[string]{Valid: p.LinkTxt.Valid, Value: p.LinkTxt.String},
+			Points:      points,
 		})
 	}
 

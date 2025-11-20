@@ -160,7 +160,7 @@ func (d Db) GetProjects(ctx context.Context, lang string) ([]entity.Project, err
 	for rows.Next() {
 		var p entity.Project
 
-		if e := rows.Scan(&p.Id, &p.ProjectName, &p.Link, &p.LinkTxt); e != nil {
+		if e := rows.Scan(&p.Id, &p.ProjectName, &p.Link, &p.LinkTxt, &p.Points); e != nil {
 			return nil, e
 		}
 
