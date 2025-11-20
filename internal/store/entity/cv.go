@@ -11,6 +11,7 @@ type Experience struct {
 	CompanyName  pgtype.Text   `db:"company_name"`
 	PositionName pgtype.Text   `db:"position_name"`
 	Skills       []pgtype.Text `db:"skills"`
+	Location     pgtype.Text   `db:"location"`
 	StartDt      pgtype.Date   `db:"start_dt"`
 	EndDt        pgtype.Date   `db:"end_dt"`
 }

@@ -11,6 +11,7 @@ type Experience struct {
 	CompanyName  string                    `json:"company_name"`
 	PositionName string                    `json:"position_name"`
 	Skills       []string                  `json:"skills"`
+	Location     string                    `json:"location"`
 	StartDt      utils.Nullable[time.Time] `json:"start_dt"`
 	EndDt        utils.Nullable[time.Time] `json:"end_dt"`
 }

@@ -80,7 +80,7 @@ func (d Db) GetExperience(ctx context.Context, lang string) ([]entity.Experience
 	for rows.Next() {
 		var m entity.Experience
 
-		if err := rows.Scan(&m.Id, &m.CompanyName, &m.PositionName, &m.Skills, &m.StartDt, &m.EndDt); err != nil {
+		if err := rows.Scan(&m.Id, &m.CompanyName, &m.PositionName, &m.Skills, &m.Location, &m.StartDt, &m.EndDt); err != nil {
 			return nil, err
 		}
 

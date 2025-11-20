@@ -72,6 +72,8 @@ func (s Cv) Experience(ctx context.Context, lang string) ([]responses.Experience
 			r.Skills = append(r.Skills, sk.String)
 		}
 
+		r.Location = m.Location.String
+
 		r.StartDt = utils.Nullable[time.Time]{
 			Valid: m.StartDt.Valid,
 			Value: m.StartDt.Time,
