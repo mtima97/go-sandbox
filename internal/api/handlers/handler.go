@@ -32,25 +32,25 @@ func (h Handler) GetProfile(ctx *gin.Context) {
 func (h Handler) GetExperience(ctx *gin.Context) {
 	lang := ctx.DefaultQuery("lang", domain.LangEn)
 
-	res, err := h.servc.Experience(ctx, lang)
+	resp, err := h.servc.Experience(ctx, lang)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, genError(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, response(res))
+	ctx.JSON(http.StatusOK, response(resp))
 }
 
 func (h Handler) GetEducation(ctx *gin.Context) {
 	lang := ctx.DefaultQuery("lang", domain.LangEn)
 
-	res, err := h.servc.Education(ctx, lang)
+	resp, err := h.servc.Education(ctx, lang)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, genError(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, response(res))
+	ctx.JSON(http.StatusOK, response(resp))
 }
 
 func (h Handler) GetLanguages(ctx *gin.Context) {

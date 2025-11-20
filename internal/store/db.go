@@ -62,45 +62,60 @@ func (d Db) GetProfile(ctx context.Context, lang string) (entity.Profile, error)
 	return m, nil
 }
 
-func (d Db) GetExperience(ctx context.Context, lang string) (entity.Experience, error) {
+func (d Db) GetExperience(ctx context.Context, lang string) ([]entity.Experience, error) {
 	q := "select * from get_experience($1)"
 
-	var m entity.Experience
+	var pgmodels []entity.Experience
 
-	err := d.pool.QueryRow(ctx, q, lang).Scan(
-		&m.Id,
-		&m.CompanyName,
-		&m.PositionName,
-		&m.Skills,
-		&m.StartDt,
-		&m.EndDt,
-	)
-
+	rows, err := d.pool.Query(ctx, q, lang)
 	if err != nil {
-		return m, err
+		return nil, err
+	}
+	defer rows.Close()
+
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 
-	return m, nil
+	for rows.Next() {
+		var m entity.Experience
+
+		if err := rows.Scan(&m.Id, &m.CompanyName, &m.PositionName, &m.Skills, &m.StartDt, &m.EndDt); err != nil {
+			return nil, err
+		}
+
+		pgmodels = append(pgmodels, m)
+	}
+
+	return pgmodels, nil
 }
 
-func (d Db) GetEducation(ctx context.Context, lang string) (entity.Education, error) {
+func (d Db) GetEducation(ctx context.Context, lang string) ([]entity.Education, error) {
 	q := "select * from get_education($1)"
 
-	var m entity.Education
+	var entities []entity.Education
 
-	err := d.pool.QueryRow(ctx, q, lang).Scan(
-		&m.Id,
-		&m.UniversityName,
-		&m.Achievements,
-		&m.StartDt,
-		&m.EndDt,
-	)
-
+	rows, err := d.pool.Query(ctx, q, lang)
 	if err != nil {
-		return m, err
+		return nil, err
+	}
+	defer rows.Close()
+
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 
-	return m, nil
+	for rows.Next() {
+		var e entity.Education
+
+		if err := rows.Scan(&e.Id, &e.UniversityName, &e.Achievements, &e.StartDt, &e.EndDt); err != nil {
+			return nil, err
+		}
+
+		entities = append(entities, e)
+	}
+
+	return entities, nil
 }
 
 func (d Db) GetLanguages(ctx context.Context, lang string) ([]entity.Language, error) {

@@ -52,56 +52,68 @@ func (s Cv) Profile(ctx context.Context, lang string) (responses.Profile, error)
 	return res, nil
 }
 
-func (s Cv) Experience(ctx context.Context, lang string) (responses.Experience, error) {
-	var res responses.Experience
+func (s Cv) Experience(ctx context.Context, lang string) ([]responses.Experience, error) {
+	var resp []responses.Experience
 
-	pgmodel, err := s.store.GetExperience(ctx, lang)
+	pgmodels, err := s.store.GetExperience(ctx, lang)
 	if err != nil {
 		log.Print(fmt.Sprintf("GetExperience: %v", err))
-		return res, ErrDb
+		return nil, ErrDb
 	}
 
-	res.Id = pgmodel.Id.Int64
-	res.CompanyName = pgmodel.CompanyName.String
-	res.PositionName = pgmodel.PositionName.String
+	for _, m := range pgmodels {
+		var r responses.Experience
 
-	for _, sk := range pgmodel.Skills {
-		res.Skills = append(res.Skills, sk.String)
+		r.Id = m.Id.Int64
+		r.CompanyName = m.CompanyName.String
+		r.PositionName = m.PositionName.String
+
+		for _, sk := range m.Skills {
+			r.Skills = append(r.Skills, sk.String)
+		}
+
+		r.StartDt = utils.Nullable[time.Time]{
+			Valid: m.StartDt.Valid,
+			Value: m.StartDt.Time,
+		}
+
+		r.EndDt = utils.Nullable[time.Time]{
+			Valid: m.EndDt.Valid,
+			Value: m.EndDt.Time,
+		}
+
+		resp = append(resp, r)
 	}
 
-	res.StartDt = utils.Nullable[time.Time]{
-		Valid: pgmodel.StartDt.Valid,
-		Value: pgmodel.StartDt.Time,
-	}
-
-	res.EndDt = utils.Nullable[time.Time]{
-		Valid: pgmodel.EndDt.Valid,
-		Value: pgmodel.EndDt.Time,
-	}
-
-	return res, nil
+	return resp, nil
 }
 
-func (s Cv) Education(ctx context.Context, lang string) (responses.Education, error) {
-	var res responses.Education
+func (s Cv) Education(ctx context.Context, lang string) ([]responses.Education, error) {
+	var resp []responses.Education
 
-	pgmodel, err := s.store.GetEducation(ctx, lang)
+	educations, err := s.store.GetEducation(ctx, lang)
 	if err != nil {
 		log.Print(fmt.Sprintf("GetEducation: %v", err))
-		return res, ErrDb
+		return nil, ErrDb
 	}
 
-	res.Id = pgmodel.Id.Int64
-	res.University = pgmodel.UniversityName.String
+	for _, e := range educations {
+		var r responses.Education
 
-	for _, a := range pgmodel.Achievements {
-		res.Achievements = append(res.Achievements, a.String)
+		r.Id = e.Id.Int64
+		r.University = e.UniversityName.String
+
+		for _, a := range e.Achievements {
+			r.Achievements = append(r.Achievements, a.String)
+		}
+
+		r.StartDt = e.StartDt.Time
+		r.EndDt = e.EndDt.Time
+
+		resp = append(resp, r)
 	}
 
-	res.StartDt = pgmodel.StartDt.Time
-	res.EndDt = pgmodel.EndDt.Time
-
-	return res, nil
+	return resp, nil
 }
 
 func (s Cv) Languages(ctx context.Context, lang string) ([]responses.Language, error) {
