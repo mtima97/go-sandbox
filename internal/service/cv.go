@@ -39,6 +39,13 @@ func (s Cv) Profile(ctx context.Context, lang string) (responses.Profile, error)
 	res.Residence = p.Residence.String
 	res.Skills = p.Skills
 
+	if p.Summary.Valid {
+		res.Summary = utils.Nullable[string]{
+			Value: p.Summary.String,
+			Valid: true,
+		}
+	}
+
 	v, err := p.Salary.Value()
 	if err != nil {
 		return res, err

@@ -52,6 +52,7 @@ func (d Db) GetProfile(ctx context.Context, lang string) (entity.Profile, error)
 		&m.SalaryExpectation,
 		&m.FullName,
 		&m.Residence,
+		&m.Summary,
 		&m.Skills,
 	)
 

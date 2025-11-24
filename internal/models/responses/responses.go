@@ -17,14 +17,15 @@ type Experience struct {
 }
 
 type Profile struct {
-	Id                int64           `json:"id"`
-	Email             string          `json:"email"`
-	Phone             string          `json:"phone"`
-	Salary            float64         `json:"salary"`
-	SalaryExpectation string          `json:"salary_exp"`
-	FullName          string          `json:"fullname"`
-	Residence         string          `json:"residence"`
-	Skills            json.RawMessage `json:"skills"`
+	Id                int64                  `json:"id"`
+	Email             string                 `json:"email"`
+	Phone             string                 `json:"phone"`
+	Salary            float64                `json:"salary"`
+	SalaryExpectation string                 `json:"salary_exp"`
+	FullName          string                 `json:"fullname"`
+	Residence         string                 `json:"residence"`
+	Summary           utils.Nullable[string] `json:"summary"`
+	Skills            json.RawMessage        `json:"skills"`
 }
 
 type Education struct {

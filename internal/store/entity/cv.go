@@ -24,6 +24,7 @@ type Profile struct {
 	SalaryExpectation pgtype.Text     `db:"salary_exp"`
 	FullName          pgtype.Text     `db:"fullname"`
 	Residence         pgtype.Text     `db:"residence"`
+	Summary           pgtype.Text     `db:"summary"`
 	Skills            json.RawMessage `db:"main_skills"`
 }
 
