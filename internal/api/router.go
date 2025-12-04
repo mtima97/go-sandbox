@@ -1,33 +1,22 @@
 package api
 
 import (
-	"log"
-	"test/internal/api/handlers"
-	"test/internal/service"
+	handlers "test/internal/api/handlers/v2"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(cv service.Cv, addr string) {
+func Register(h handlers.CvHandler) *gin.Engine {
 	r := gin.Default()
-	h := handlers.NewHandler(cv)
-
 	r.Use(cors.Default())
 
-	api := r.Group("/api")
-
+	v2 := r.Group("/api/v2")
 	{
-		api.GET("/profile", h.GetProfile)
-		api.GET("/experience", h.GetExperience)
-		api.GET("/education", h.GetEducation)
-		api.GET("/languages", h.GetLanguages)
-		api.GET("/projects", h.GetProjects)
+		v2.GET("/cv", h.GetCV)
 	}
 
-	r.NoRoute(h.NoRoute)
+	r.NoRoute(h.Default)
 
-	if err := r.Run(addr); err != nil {
-		log.Fatalf("cannot start api server: %v", err)
-	}
+	return r
 }

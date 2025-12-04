@@ -4,8 +4,9 @@ import (
 	"context"
 	"log"
 	"test/internal/api"
+	handlers "test/internal/api/handlers/v2"
 	"test/internal/config"
-	"test/internal/service"
+	service "test/internal/service/v2"
 	"test/internal/store"
 )
 
@@ -24,5 +25,9 @@ func main() {
 
 	defer db.Close()
 
-	api.RegisterRoutes(service.New(db), conf.AppPort)
+	engine := api.Register(handlers.NewCvHandler(service.NewCvService(db)))
+
+	if err = engine.Run(conf.AppPort); err != nil {
+		log.Fatal(err)
+	}
 }
