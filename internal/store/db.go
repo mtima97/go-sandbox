@@ -35,11 +35,6 @@ func NewDbConn(ctx context.Context, cfg config.Cfg) (Db, error) {
 		return Db{}, err
 	}
 
-	_, err = pool.Exec(ctx, "set search_path to v2;")
-	if err != nil {
-		return Db{}, err
-	}
-
 	return Db{pool: pool}, nil
 }
 
@@ -55,15 +50,15 @@ func (d Db) GetEntityByName(ctx context.Context, name, language string) (json.Ra
 
 	switch name {
 	case "profile":
-		q = "select * from v2.get_profile($1::text)"
+		q = "select * from get_profile($1::text)"
 	case "projects":
-		q = "select * from v2.get_projects($1::text)"
+		q = "select * from get_projects($1::text)"
 	case "languages":
-		q = "select * from v2.get_languages($1::text)"
+		q = "select * from get_languages($1::text)"
 	case "experience":
-		q = "select * from v2.get_experience($1::text)"
+		q = "select * from get_experience($1::text)"
 	case "education":
-		q = "select * from v2.get_education($1::text)"
+		q = "select * from get_education($1::text)"
 	default:
 		return nil, errors.New("unknown entity name")
 	}
