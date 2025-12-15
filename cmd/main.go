@@ -25,7 +25,7 @@ func main() {
 
 	defer db.Close()
 
-	engine := api.Register(handlers.NewCvHandler(service.NewCvService(db)))
+	engine := api.Register(handlers.NewCvHandler(service.NewCvService(db)), conf)
 
 	if err = engine.Run(conf.AppPort); err != nil {
 		log.Fatal(err)
