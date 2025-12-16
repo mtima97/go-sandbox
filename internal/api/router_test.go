@@ -37,7 +37,7 @@ func TestTheEndpoint(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/api/v2/cv?lang=ru", nil)
 
-	if rec.Code == http.StatusOK {
+	if rec.Code != http.StatusOK {
 		t.Fatal(rec.Code)
 	}
 
