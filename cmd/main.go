@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	ctx := context.Background() // Test
+	ctx := context.Background()
 
 	conf, err := config.Load()
 	if err != nil {
