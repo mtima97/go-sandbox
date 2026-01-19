@@ -3,8 +3,10 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	handlers "test/internal/api/handlers/v2"
 	"test/internal/config"
 	service "test/internal/service/v2"
@@ -16,7 +18,9 @@ import (
 type FakeDb struct{}
 
 func (r FakeDb) GetEntityByName(ctx context.Context, name, language string) (json.RawMessage, error) {
-	return json.RawMessage("[]"), nil
+	res := fmt.Sprintf(`{"name": "%s", "language": "%s"}`, name, language)
+
+	return json.RawMessage(res), nil
 }
 
 func setupRouter(c func(k, v string)) *gin.Engine {
@@ -46,12 +50,30 @@ func TestTheEndpoint(t *testing.T) {
 		t.Setenv(k, v)
 	})
 
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest(http.MethodGet, "/api/v2/cv?lang=ru", nil)
-
-	if rec.Code != http.StatusOK {
-		t.Fatal(rec.Code)
+	tests := []struct {
+		language string
+		result   string
+	}{
+		{"ru", `"language":"ru"`},
+		{"en", `"language":"en"`},
 	}
 
-	r.ServeHTTP(rec, req)
+	for _, tt := range tests {
+		t.Run(tt.language, func(t *testing.T) {
+			target := fmt.Sprintf("/api/v2/cv?lang=%s", tt.language)
+
+			rec := httptest.NewRecorder()
+			req := httptest.NewRequest(http.MethodGet, target, nil)
+
+			r.ServeHTTP(rec, req)
+
+			if rec.Code != http.StatusOK {
+				t.Fatalf("%s: %d", tt.language, rec.Code)
+			}
+
+			if !strings.Contains(rec.Body.String(), tt.result) {
+				t.Fatalf("result does not match: %s", rec.Body.String())
+			}
+		})
+	}
 }
