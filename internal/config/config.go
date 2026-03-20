@@ -6,13 +6,13 @@ import (
 )
 
 type Cfg struct {
-	AppPort        string   `env:"APP_PORT,required"`
+	AppPort        string   `env:"APP_PORT" envDefault:":8080"`
 	AllowedOrigins []string `env:"ALLOWED_ORIGINS"`
 	DbUser         string   `env:"DB_USER,required"`
 	DbPass         string   `env:"DB_PASS,required"`
 	DbHost         string   `env:"DB_HOST,required"`
-	DbPort         string   `env:"DB_PORT,required"`
-	DbName         string   `env:"DB_NAME,required"`
+	DbPort         string   `env:"DB_PORT" envDefault:"47916"`
+	DbName         string   `env:"DB_NAME" envDefault:"railway"`
 }
 
 func Load() (Cfg, error) {
