@@ -15,18 +15,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type FakeDb struct{}
-
-func (r FakeDb) GetEntityByName(ctx context.Context, name, language string) (json.RawMessage, error) {
-	res := fmt.Sprintf(`{"name": "%s", "language": "%s"}`, name, language)
-
-	return json.RawMessage(res), nil
+type FakeDb struct {
+	GetEntityByNameFunc func(ctx context.Context, name, language string) (json.RawMessage, error)
 }
 
-func setupRouter(c func(k, v string)) *gin.Engine {
-	h := handlers.NewCvHandler(service.NewCvService(FakeDb{}))
+func (r FakeDb) GetEntityByName(ctx context.Context, name, language string) (json.RawMessage, error) {
+	return r.GetEntityByNameFunc(ctx, name, language)
+}
 
-	envMock := map[string]string{
+var (
+	env = map[string]string{
 		"APP_PORT":        "8080",
 		"ALLOWED_ORIGINS": "*",
 		"DB_USER":         "",
@@ -35,10 +33,15 @@ func setupRouter(c func(k, v string)) *gin.Engine {
 		"DB_PORT":         "",
 		"DB_NAME":         "",
 	}
+)
 
-	for k, v := range envMock {
-		c(k, v)
-	}
+func setupRouter() *gin.Engine {
+	h := handlers.NewCvHandler(service.NewCvService(FakeDb{
+		GetEntityByNameFunc: func(ctx context.Context, name, language string) (json.RawMessage, error) {
+			resp := fmt.Sprintf(`{"name": "%s", "language": "%s"}`, name, language)
+			return json.RawMessage(resp), nil
+		},
+	}))
 
 	conf, _ := config.Load()
 
@@ -46,9 +49,11 @@ func setupRouter(c func(k, v string)) *gin.Engine {
 }
 
 func TestTheEndpoint(t *testing.T) {
-	r := setupRouter(func(k, v string) {
-		t.Setenv(k, v)
-	})
+	for name, value := range env {
+		t.Setenv(name, value)
+	}
+
+	r := setupRouter()
 
 	tests := []struct {
 		language string
