@@ -6,7 +6,7 @@ import (
 )
 
 func TestNewDB(t *testing.T) {
-	sName := filepath.Join(t.TempDir(), "cv.db")
+	sName := filepath.Join("./testdata", "cv_test.db")
 
 	db, err := NewDB(sName)
 	if err != nil {
